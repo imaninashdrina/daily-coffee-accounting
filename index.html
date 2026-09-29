@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Coffee Shop - Akuntansi Persediaan & Material Flow</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Supabase JS Client via CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <header>
+        <h1>☕ Daily Coffee Shop</h1>
+        <p>Sistem Akuntansi Persediaan & Material Flow (Perpetual Inventory System)</p>
+    </header>
+
+    <main class="container">
+        <!-- Section 1: Form Pembelian Bahan Baku -->
+        <section class="card">
+            <h2>1. Penerimaan Material (Pembelian Bahan Baku)</h2>
+            <form id="buy-material-form">
+                <div class="form-group">
+                    <label>Pilih Bahan Baku:</label>
+                    <select id="buy-material-id" required></select>
+                </div>
+                <div class="form-group">
+                    <label>Jumlah Diterima (Qty):</label>
+                    <input type="number" id="buy-qty" step="0.01" required placeholder="Contoh: 1000 (g/ml/pcs)">
+                </div>
+                <div class="form-group">
+                    <label>Total Biaya Pembelian (Rp):</label>
+                    <input type="number" id="buy-cost" required placeholder="Contoh: 150000">
+                </div>
+                <button type="submit" class="btn btn-primary">Simpan & Jurnal Pembelian</button>
+            </form>
+        </section>
+
+        <!-- Section 2: Form Transaksi Penjualan (Material Flow) -->
+        <section class="card">
+            <h2>2. Transaksi Penjualan & Pemotongan Material Flow</h2>
+            <form id="sell-product-form">
+                <div class="form-group">
+                    <label>Pilih Menu Kopi:</label>
+                    <select id="sell-product-id" required></select>
+                </div>
+                <div class="form-group">
+                    <label>Jumlah Terjual (Qty):</label>
+                    <input type="number" id="sell-qty" value="1" min="1" required>
+                </div>
+                <button type="submit" class="btn btn-success">Proses Penjualan (Auto Deduct & Jurnal)</button>
+            </form>
+        </section>
+
+        <!-- Section 3: Kartu Stok Bahan Baku -->
+        <section class="card full-width">
+            <h2>3. Kartu Stok & Nilai Persediaan (Raw Materials)</h2>
+            <table id="stock-table">
+                <thead>
+                    <tr>
+                        <th>Kode</th>
+                        <th>Nama Bahan</th>
+                        <th>Stok Fisik</th>
+                        <th>Satuan</th>
+                        <th>Cost/Unit (Rp)</th>
+                        <th>Total Nilai (Rp)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Injected by JS -->
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Section 4: Jurnal Umum Akuntansi -->
+        <section class="card full-width">
+            <h2>4. Jurnal Umum Akuntansi Otomatis</h2>
+            <table id="journal-table">
+                <thead>
+                    <tr>
+                        <th>Tanggal</th>
+                        <th>Keterangan Transaksi</th>
+                        <th>Debit (Akun)</th>
+                        <th>Kredit (Akun)</th>
+                        <th>Jumlah (Rp)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Injected by JS -->
+                </tbody>
+            </table>
+        </section>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>     
