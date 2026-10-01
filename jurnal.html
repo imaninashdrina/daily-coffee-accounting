@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Coffee - Jurnal Umum</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body page-id="jurnal">
+    <div class="app-layout">
+        <aside class="sidebar">
+            <div class="brand">
+                <img src="https://cdn-icons-png.flaticon.com/512/2935/2935301.png" alt="Logo Coffee" class="logo">
+                <div class="brand-text">
+                    <h2>Daily Coffee</h2>
+                    <span>Accounting System</span>
+                </div>
+            </div>
+
+            <nav class="nav-menu">
+                <a href="index.html" class="nav-item"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
+                <a href="pembelian.html" class="nav-item"><i class="fa-solid fa-cart-flatbed"></i> Penerimaan Material</a>
+                <a href="penjualan.html" class="nav-item"><i class="fa-solid fa-cash-register"></i> Transaksi Penjualan</a>
+                <a href="persediaan.html" class="nav-item"><i class="fa-solid fa-boxes-stacked"></i> Kartu Persediaan</a>
+                <a href="jurnal.html" class="nav-item active"><i class="fa-solid fa-book-journal-whills"></i> Jurnal Umum</a>
+            </nav>
+
+            <div class="sidebar-footer"><p>Daily Coffee Shop &copy; 2026</p></div>
+        </aside>
+
+        <main class="main-content">
+            <header class="top-header">
+                <h1>Jurnal Umum</h1>
+                <div class="user-badge"><i class="fa-solid fa-circle-user"></i> <span>Kasir / Akuntan</span></div>
+            </header>
+
+            <div class="content-body">
+                <div class="card">
+                    <h2><i class="fa-solid fa-book"></i> Jurnal Umum Akuntansi Otomatis</h2>
+                    <div class="table-responsive">
+                        <table id="journal-table">
+                            <thead>
+                                <tr>
+                                    <th>Tanggal</th>
+                                    <th>Keterangan Transaksi</th>
+                                    <th>Debit (Akun)</th>
+                                    <th>Kredit (Akun)</th>
+                                    <th>Jumlah (Rp)</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
