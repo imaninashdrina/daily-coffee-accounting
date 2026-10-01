@@ -39,12 +39,11 @@
         <!-- Main Content -->
         <main class="main-content">
             <header class="top-header">
-                <!-- Tombol Hamburger khusus Tampilan HP/Tablet -->
                 <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Toggle Menu">
                     <i class="fa-solid fa-bars"></i>
                 </button>
 
-                <h1>Dashboard Utama</h1>
+                <h1>Dashboard Akuntansi & Persediaan</h1>
 
                 <div class="user-badge">
                     <i class="fa-solid fa-circle-user"></i> <span>Kasir / Akuntan</span>
@@ -52,12 +51,13 @@
             </header>
 
             <div class="content-body">
+                <!-- Grid 1: Baris Card Statistik Utama -->
                 <div class="metrics-grid">
                     <div class="metric-card">
-                        <div class="icon bg-coffee"><i class="fa-solid fa-box"></i></div>
+                        <div class="icon bg-coffee"><i class="fa-solid fa-boxes-packing"></i></div>
                         <div class="info">
-                            <span>Total Jenis Bahan</span>
-                            <h3 id="stat-total-materials">0</h3>
+                            <span>Total Bahan Baku</span>
+                            <h3 id="stat-total-materials">0 Jenis</h3>
                         </div>
                     </div>
                     <div class="metric-card">
@@ -68,18 +68,63 @@
                         </div>
                     </div>
                     <div class="metric-card">
-                        <div class="icon bg-blue"><i class="fa-solid fa-receipt"></i></div>
+                        <div class="icon bg-blue"><i class="fa-solid fa-money-bill-trend-up"></i></div>
                         <div class="info">
-                            <span>Total Transaksi Jurnal</span>
-                            <h3 id="stat-total-journals">0</h3>
+                            <span>Total Penjualan</span>
+                            <h3 id="stat-total-sales">Rp 0</h3>
+                        </div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="icon bg-orange"><i class="fa-solid fa-scale-balanced"></i></div>
+                        <div class="info">
+                            <span>Laba Kotor Kedai</span>
+                            <h3 id="stat-gross-profit">Rp 0</h3>
                         </div>
                     </div>
                 </div>
 
+                <!-- Grid 2: Tabel Rincian Cepat -->
+                <div class="dashboard-tables-grid mt-20">
+                    <!-- Ringkasan Stok Menipis -->
+                    <div class="card">
+                        <h2><i class="fa-solid fa-triangle-exclamation" style="color: #e74c3c;"></i> Peringatan Stok Menipis</h2>
+                        <div class="table-responsive">
+                            <table id="low-stock-table">
+                                <thead>
+                                    <tr>
+                                        <th>Bahan Baku</th>
+                                        <th>Sisa Stok</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Transaksi Penjualan Terakhir -->
+                    <div class="card">
+                        <h2><i class="fa-solid fa-clock-rotate-left" style="color: #2980b9;"></i> Penjualan Terakhir</h2>
+                        <div class="table-responsive">
+                            <table id="recent-sales-table">
+                                <thead>
+                                    <tr>
+                                        <th>Waktu</th>
+                                        <th>Menu Terjual</th>
+                                        <th>Total (Rp)</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card Informasi Sistem -->
                 <div class="card mt-20">
-                    <h2>☕ Selamat Datang di Sistem Akuntansi Daily Coffee Shop</h2>
-                    <p style="color: #666; margin-top: 10px; line-height: 1.6;">
-                        Sistem ini mengelola pencatatan persediaan bahan baku menggunakan metode <strong>Perpetual Moving Average</strong> serta pencatatan otomatis <strong>Material Flow & HPP</strong> pada setiap transaksi penjualan.
+                    <h2><i class="fa-solid fa-circle-info"></i> Ringkasan Sistem Akuntansi</h2>
+                    <p style="color: #666; margin-top: 8px; line-height: 1.6;">
+                        Sistem ini berjalan dengan metode <strong>Perpetual Moving Average</strong>. Setiap transaksi penerimaan bahan baku akan menyesuaikan harga pokok rata-rata tertimbang, sedangkan setiap transaksi penjualan menu akan memotong persediaan bahan baku secara otomatis (<em>Material Flow</em>) dan mencatat jurnal HPP secara <em>real-time</em>.
                     </p>
                 </div>
             </div>
