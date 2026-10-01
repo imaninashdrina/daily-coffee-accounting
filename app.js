@@ -38,13 +38,11 @@ function initMobileNavigation() {
     const overlay = document.getElementById('sidebar-overlay');
 
     if (menuBtn && sidebar && overlay) {
-        // Buka / Tutup Sidebar saat tombol hamburger diklik
         menuBtn.addEventListener('click', () => {
             sidebar.classList.toggle('mobile-open');
             overlay.classList.toggle('active');
         });
 
-        // Tutup Sidebar saat area di luar menu diklik
         overlay.addEventListener('click', () => {
             sidebar.classList.remove('mobile-open');
             overlay.classList.remove('active');
@@ -56,23 +54,70 @@ function initMobileNavigation() {
 async function loadDashboardMetrics() {
     const statMaterials = document.getElementById('stat-total-materials');
     const statAsset = document.getElementById('stat-total-asset');
-    const statJournals = document.getElementById('stat-total-journals');
+    const statSales = document.getElementById('stat-total-sales');
+    const statProfit = document.getElementById('stat-gross-profit');
+    const lowStockTable = document.querySelector('#low-stock-table tbody');
+    const recentSalesTable = document.querySelector('#recent-sales-table tbody');
 
+    // Fetch Data dari Supabase
     const { data: materials, error: errMaterials } = await supabaseClient.from('raw_materials').select('*');
-    const { data: journals, error: errJournals } = await supabaseClient.from('journal_entries').select('*');
+    const { data: sales, error: errSales } = await supabaseClient.from('sales').select('*, products(name)').order('created_at', { ascending: false });
 
     if (errMaterials) console.error("Error loading materials:", errMaterials);
-    if (errJournals) console.error("Error loading journals:", errJournals);
+    if (errSales) console.error("Error loading sales:", errSales);
 
+    // Hitung Total Aset Persediaan & Deteksi Stok Menipis (Stok <= 500)
     let totalAsset = 0;
     if (materials) {
         materials.forEach(m => totalAsset += ((m.stock_qty || 0) * (m.unit_cost || 0)));
-        if (statMaterials) statMaterials.textContent = materials.length;
+        if (statMaterials) statMaterials.textContent = `${materials.length} Jenis`;
         if (statAsset) statAsset.textContent = `Rp ${totalAsset.toLocaleString('id-ID')}`;
+
+        if (lowStockTable) {
+            const lowMaterials = materials.filter(m => m.stock_qty <= 500);
+            if (lowMaterials.length > 0) {
+                lowStockTable.innerHTML = lowMaterials.map(m => `
+                    <tr>
+                        <td>${m.name}</td>
+                        <td><strong>${Number(m.stock_qty).toLocaleString('id-ID')} ${m.unit}</strong></td>
+                        <td><span class="badge-danger">Stok Rendah</span></td>
+                    </tr>
+                `).join('');
+            } else {
+                lowStockTable.innerHTML = `<tr><td colspan="3" style="text-align:center;"><span class="badge-success">Semua Stok Aman</span></td></tr>`;
+            }
+        }
     }
 
-    if (journals && statJournals) {
-        statJournals.textContent = journals.length;
+    // Hitung Omzet, HPP, Laba Kotor & 5 Transaksi Terakhir
+    let totalPenjualan = 0;
+    let totalHPP = 0;
+
+    if (sales) {
+        sales.forEach(s => {
+            totalPenjualan += (s.total_price || 0);
+            totalHPP += (s.total_hpp || 0);
+        });
+
+        const grossProfit = totalPenjualan - totalHPP;
+
+        if (statSales) statSales.textContent = `Rp ${totalPenjualan.toLocaleString('id-ID')}`;
+        if (statProfit) statProfit.textContent = `Rp ${grossProfit.toLocaleString('id-ID')}`;
+
+        if (recentSalesTable) {
+            const recentSales = sales.slice(0, 5);
+            if (recentSales.length > 0) {
+                recentSalesTable.innerHTML = recentSales.map(s => `
+                    <tr>
+                        <td>${new Date(s.created_at).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })}</td>
+                        <td>${s.products ? s.products.name : 'Kopi'} (x${s.qty_sold})</td>
+                        <td><strong>Rp ${Number(s.total_price).toLocaleString('id-ID')}</strong></td>
+                    </tr>
+                `).join('');
+            } else {
+                recentSalesTable.innerHTML = `<tr><td colspan="3" style="text-align:center;">Belum ada transaksi</td></tr>`;
+            }
+        }
     }
 }
 
@@ -204,7 +249,7 @@ if (buyForm) {
         }]);
 
         alert('Pembelian berhasil dicatat!');
-        window.location.href = 'persediaan.html'; // Pindah ke halaman persediaan
+        window.location.href = 'persediaan.html';
     });
 }
 
@@ -286,6 +331,6 @@ if (sellForm) {
         }]);
 
         alert(`Penjualan ${product.name} Berhasil!`);
-        window.location.href = 'jurnal.html'; // Pindah ke halaman jurnal
+        window.location.href = 'jurnal.html';
     });
 }

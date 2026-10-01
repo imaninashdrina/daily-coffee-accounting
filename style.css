@@ -369,3 +369,36 @@ table tbody tr:hover {
         white-space: nowrap; /* Mencegah tabel berantakan, bisa di-scroll horizontal */
     }
 }
+
+/* Styling Tambahan Dashboard Rinci */
+.bg-orange { background-color: #e67e22; }
+
+.dashboard-tables-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.badge-danger {
+    background-color: #fce4e4;
+    color: #cc0000;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.badge-success {
+    background-color: #e8f8f5;
+    color: #27ae60;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+@media (max-width: 768px) {
+    .dashboard-tables-grid {
+        grid-template-columns: 1fr;
+    }
+}
