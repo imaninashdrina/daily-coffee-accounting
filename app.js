@@ -334,3 +334,49 @@ if (sellForm) {
         window.location.href = 'jurnal.html';
     });
 }
+// Tambahkan di dalam switch/if-else DOMContentLoaded di app.js:
+// else if (pageId === 'laporan') { loadFinancialReports(); }
+
+async function loadFinancialReports() {
+    const reportSales = document.getElementById('report-sales');
+    const reportHpp = document.getElementById('report-hpp');
+    const reportGross = document.getElementById('report-gross-profit');
+    const reportExpenses = document.getElementById('report-expenses');
+    const reportNet = document.getElementById('report-net-profit');
+    const reportAssetInventory = document.getElementById('report-asset-inventory');
+
+    // Fetch Penjualan, Beban, dan Persediaan
+    const { data: sales } = await supabaseClient.from('sales').select('*');
+    const { data: expenses } = await supabaseClient.from('expenses').select('*');
+    const { data: materials } = await supabaseClient.from('raw_materials').select('*');
+
+    let totalSales = 0;
+    let totalHpp = 0;
+    let totalExpenses = 0;
+    let totalInventoryAsset = 0;
+
+    if (sales) {
+        sales.forEach(s => {
+            totalSales += (s.total_price || 0);
+            totalHpp += (s.total_hpp || 0);
+        });
+    }
+
+    if (expenses) {
+        expenses.forEach(e => totalExpenses += (e.amount || 0));
+    }
+
+    if (materials) {
+        materials.forEach(m => totalInventoryAsset += ((m.stock_qty || 0) * (m.unit_cost || 0)));
+    }
+
+    const grossProfit = totalSales - totalHpp;
+    const netProfit = grossProfit - totalExpenses;
+
+    if (reportSales) reportSales.textContent = `Rp ${totalSales.toLocaleString('id-ID')}`;
+    if (reportHpp) reportHpp.textContent = `- Rp ${totalHpp.toLocaleString('id-ID')}`;
+    if (reportGross) reportGross.textContent = `Rp ${grossProfit.toLocaleString('id-ID')}`;
+    if (reportExpenses) reportExpenses.textContent = `- Rp ${totalExpenses.toLocaleString('id-ID')}`;
+    if (reportNet) reportNet.textContent = `Rp ${netProfit.toLocaleString('id-ID')}`;
+    if (reportAssetInventory) reportAssetInventory.textContent = `Rp ${totalInventoryAsset.toLocaleString('id-ID')}`;
+}
