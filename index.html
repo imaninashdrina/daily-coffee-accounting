@@ -3,94 +3,80 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daily Coffee Shop - Akuntansi Persediaan & Material Flow</title>
+    <title>Daily Coffee - Dashboard</title>
     <link rel="stylesheet" href="style.css">
-    <!-- Supabase JS Client via CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
-<body>
-    <header>
-        <h1>☕ Daily Coffee Shop</h1>
-        <p>Sistem Akuntansi Persediaan & Material Flow (Perpetual Inventory System)</p>
-    </header>
+<body page-id="dashboard">
+    <div class="app-layout">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="brand">
+                <img src="https://cdn-icons-png.flaticon.com/512/2935/2935301.png" alt="Logo Coffee" class="logo">
+                <div class="brand-text">
+                    <h2>Daily Coffee</h2>
+                    <span>Accounting System</span>
+                </div>
+            </div>
 
-    <main class="container">
-        <!-- Section 1: Form Pembelian Bahan Baku -->
-        <section class="card">
-            <h2>1. Penerimaan Material (Pembelian Bahan Baku)</h2>
-            <form id="buy-material-form">
-                <div class="form-group">
-                    <label>Pilih Bahan Baku:</label>
-                    <select id="buy-material-id" required></select>
-                </div>
-                <div class="form-group">
-                    <label>Jumlah Diterima (Qty):</label>
-                    <input type="number" id="buy-qty" step="0.01" required placeholder="Contoh: 1000 (g/ml/pcs)">
-                </div>
-                <div class="form-group">
-                    <label>Total Biaya Pembelian (Rp):</label>
-                    <input type="number" id="buy-cost" required placeholder="Contoh: 150000">
-                </div>
-                <button type="submit" class="btn btn-primary">Simpan & Jurnal Pembelian</button>
-            </form>
-        </section>
+            <nav class="nav-menu">
+                <a href="index.html" class="nav-item active"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
+                <a href="pembelian.html" class="nav-item"><i class="fa-solid fa-cart-flatbed"></i> Penerimaan Material</a>
+                <a href="penjualan.html" class="nav-item"><i class="fa-solid fa-cash-register"></i> Transaksi Penjualan</a>
+                <a href="persediaan.html" class="nav-item"><i class="fa-solid fa-boxes-stacked"></i> Kartu Persediaan</a>
+                <a href="jurnal.html" class="nav-item"><i class="fa-solid fa-book-journal-whills"></i> Jurnal Umum</a>
+            </nav>
 
-        <!-- Section 2: Form Transaksi Penjualan (Material Flow) -->
-        <section class="card">
-            <h2>2. Transaksi Penjualan & Pemotongan Material Flow</h2>
-            <form id="sell-product-form">
-                <div class="form-group">
-                    <label>Pilih Menu Kopi:</label>
-                    <select id="sell-product-id" required></select>
-                </div>
-                <div class="form-group">
-                    <label>Jumlah Terjual (Qty):</label>
-                    <input type="number" id="sell-qty" value="1" min="1" required>
-                </div>
-                <button type="submit" class="btn btn-success">Proses Penjualan (Auto Deduct & Jurnal)</button>
-            </form>
-        </section>
+            <div class="sidebar-footer">
+                <p>Daily Coffee Shop &copy; 2026</p>
+            </div>
+        </aside>
 
-        <!-- Section 3: Kartu Stok Bahan Baku -->
-        <section class="card full-width">
-            <h2>3. Kartu Stok & Nilai Persediaan (Raw Materials)</h2>
-            <table id="stock-table">
-                <thead>
-                    <tr>
-                        <th>Kode</th>
-                        <th>Nama Bahan</th>
-                        <th>Stok Fisik</th>
-                        <th>Satuan</th>
-                        <th>Cost/Unit (Rp)</th>
-                        <th>Total Nilai (Rp)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Injected by JS -->
-                </tbody>
-            </table>
-        </section>
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="top-header">
+                <h1>Dashboard Utama</h1>
+                <div class="user-badge">
+                    <i class="fa-solid fa-circle-user"></i> <span>Kasir / Akuntan</span>
+                </div>
+            </header>
 
-        <!-- Section 4: Jurnal Umum Akuntansi -->
-        <section class="card full-width">
-            <h2>4. Jurnal Umum Akuntansi Otomatis</h2>
-            <table id="journal-table">
-                <thead>
-                    <tr>
-                        <th>Tanggal</th>
-                        <th>Keterangan Transaksi</th>
-                        <th>Debit (Akun)</th>
-                        <th>Kredit (Akun)</th>
-                        <th>Jumlah (Rp)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Injected by JS -->
-                </tbody>
-            </table>
-        </section>
-    </main>
+            <div class="content-body">
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="icon bg-coffee"><i class="fa-solid fa-box"></i></div>
+                        <div class="info">
+                            <span>Total Jenis Bahan</span>
+                            <h3 id="stat-total-materials">0</h3>
+                        </div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="icon bg-green"><i class="fa-solid fa-vault"></i></div>
+                        <div class="info">
+                            <span>Nilai Persediaan (Aset)</span>
+                            <h3 id="stat-total-asset">Rp 0</h3>
+                        </div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="icon bg-blue"><i class="fa-solid fa-receipt"></i></div>
+                        <div class="info">
+                            <span>Total Transaksi Jurnal</span>
+                            <h3 id="stat-total-journals">0</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mt-20">
+                    <h2>☕ Selamat Datang di Sistem Akuntansi Daily Coffee Shop</h2>
+                    <p style="color: #666; margin-top: 10px; line-height: 1.6;">
+                        Sistem ini mengelola pencatatan persediaan bahan baku menggunakan metode <strong>Perpetual Moving Average</strong> serta pencatatan otomatis <strong>Material Flow & HPP</strong> pada setiap transaksi penjualan.
+                    </p>
+                </div>
+            </div>
+        </main>
+    </div>
 
     <script src="app.js"></script>
 </body>
-</html>     
+</html>
