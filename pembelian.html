@@ -9,8 +9,12 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body page-id="pembelian">
+    <!-- Overlay Hitam Transparan untuk Layar HP saat Sidebar Buka -->
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
     <div class="app-layout">
-        <aside class="sidebar">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar" id="sidebar">
             <div class="brand">
                 <img src="logo.jpeg" alt="Logo Daily Coffee" class="logo">
                 <div class="brand-text">
@@ -30,10 +34,19 @@
             <div class="sidebar-footer"><p>Daily Coffee Shop &copy; 2026</p></div>
         </aside>
 
+        <!-- Main Content -->
         <main class="main-content">
             <header class="top-header">
+                <!-- Tombol Hamburger khusus Tampilan HP/Tablet -->
+                <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Toggle Menu">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+
                 <h1>Penerimaan Material</h1>
-                <div class="user-badge"><i class="fa-solid fa-circle-user"></i> <span>Kasir / Akuntan</span></div>
+
+                <div class="user-badge">
+                    <i class="fa-solid fa-circle-user"></i> <span>Kasir / Akuntan</span>
+                </div>
             </header>
 
             <div class="content-body">

@@ -265,3 +265,107 @@ table th {
 table tbody tr:hover {
     background-color: #fcf8f5;
 }
+
+/* ===================================================
+   RESPONSIF TAMPILAN HP / TABLET (MOBILE FRIENDLY)
+   =================================================== */
+
+/* Tombol Mobile Menu & Overlay (Hidden di Desktop) */
+.mobile-menu-btn {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 1.4rem;
+    color: #2c1d11;
+    cursor: pointer;
+    padding: 5px;
+}
+
+.sidebar-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 99;
+}
+
+/* Media Query untuk Layar HP / Tablet (< 768px) */
+@media (max-width: 768px) {
+    body {
+        overflow-y: auto; /* Memungkinkan scroll vertikal utama di HP */
+    }
+
+    .app-layout {
+        flex-direction: column;
+        height: auto;
+    }
+
+    /* Sidebar tersembunyi ke kiri layar saat di HP */
+    .sidebar {
+        position: fixed;
+        top: 0;
+        left: -270px;
+        width: 260px;
+        height: 100vh;
+        z-index: 100;
+        transition: left 0.3s ease;
+        box-shadow: 2px 0 10px rgba(0,0,0,0.3);
+    }
+
+    /* Tampilkan sidebar saat status active */
+    .sidebar.mobile-open {
+        left: 0;
+    }
+
+    .sidebar-overlay.active {
+        display: block;
+    }
+
+    .mobile-menu-btn {
+        display: block; /* Tampilkan tombol hamburger di HP */
+    }
+
+    .main-content {
+        width: 100%;
+    }
+
+    .top-header {
+        padding: 12px 15px;
+    }
+
+    .top-header h1 {
+        font-size: 1.1rem;
+    }
+
+    .user-badge span {
+        display: none; /* Sembunyikan teks nama di HP kecil */
+    }
+
+    .content-body {
+        padding: 15px;
+    }
+
+    /* Form Grid menjadi 1 Kolom di HP */
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .form-group.full-width {
+        grid-column: span 1;
+    }
+
+    /* Metrics Grid menjadi 1 Kolom di HP */
+    .metrics-grid {
+        grid-template-columns: 1fr;
+    }
+
+    /* Penyesuaian Tabel di Layar HP */
+    table th, table td {
+        padding: 8px 10px;
+        font-size: 0.85rem;
+        white-space: nowrap; /* Mencegah tabel berantakan, bisa di-scroll horizontal */
+    }
+}
