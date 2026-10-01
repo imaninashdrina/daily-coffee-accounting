@@ -9,7 +9,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body page-id="dashboard">
-    <!-- Overlay Hitam Transparan untuk Layar HP saat Sidebar Buka -->
+    <!-- Overlay Hitam Transparan untuk Layar HP -->
     <div class="sidebar-overlay" id="sidebar-overlay"></div>
 
     <div class="app-layout">
@@ -70,7 +70,7 @@
                     <div class="metric-card">
                         <div class="icon bg-blue"><i class="fa-solid fa-money-bill-trend-up"></i></div>
                         <div class="info">
-                            <span>Total Penjualan</span>
+                            <span>Total Omzet Penjualan</span>
                             <h3 id="stat-total-sales">Rp 0</h3>
                         </div>
                     </div>
@@ -83,9 +83,28 @@
                     </div>
                 </div>
 
-                <!-- Grid 2: Tabel Rincian Cepat -->
+                <!-- Grid 2: Widget Laba Rugi & Tabel Rincian -->
                 <div class="dashboard-tables-grid mt-20">
-                    <!-- Ringkasan Stok Menipis -->
+                    <!-- Ringkasan Laporan Laba Rugi -->
+                    <div class="card">
+                        <h2><i class="fa-solid fa-calculator" style="color: #27ae60;"></i> Ringkasan Laba Rugi</h2>
+                        <table style="width:100%; margin-top:15px; border-collapse: collapse;">
+                            <tr style="border-bottom: 1px solid #eee; height: 35px;">
+                                <td>Pendapatan Penjualan</td>
+                                <td style="text-align:right;"><strong id="summary-sales">Rp 0</strong></td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #eee; height: 35px;">
+                                <td>Beban HPP (Material Used)</td>
+                                <td style="text-align:right; color:#e74c3c;" id="summary-hpp">- Rp 0</td>
+                            </tr>
+                            <tr style="border-bottom: 2px solid #2c1d11; height: 40px; background-color: #fcf8f5;">
+                                <td><strong>LABA KOTOR (GROSS PROFIT)</strong></td>
+                                <td style="text-align:right;"><strong id="summary-gross" style="color:#27ae60;">Rp 0</strong></td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <!-- Peringatan Stok Menipis -->
                     <div class="card">
                         <h2><i class="fa-solid fa-triangle-exclamation" style="color: #e74c3c;"></i> Peringatan Stok Menipis</h2>
                         <div class="table-responsive">
@@ -101,31 +120,23 @@
                             </table>
                         </div>
                     </div>
-
-                    <!-- Transaksi Penjualan Terakhir -->
-                    <div class="card">
-                        <h2><i class="fa-solid fa-clock-rotate-left" style="color: #2980b9;"></i> Penjualan Terakhir</h2>
-                        <div class="table-responsive">
-                            <table id="recent-sales-table">
-                                <thead>
-                                    <tr>
-                                        <th>Waktu</th>
-                                        <th>Menu Terjual</th>
-                                        <th>Total (Rp)</th>
-                                    </tr>
-                                </thead>
-                                <tbody></tbody>
-                            </table>
-                        </div>
-                    </div>
                 </div>
 
-                <!-- Card Informasi Sistem -->
+                <!-- Card Riwayat Penjualan Terakhir -->
                 <div class="card mt-20">
-                    <h2><i class="fa-solid fa-circle-info"></i> Ringkasan Sistem Akuntansi</h2>
-                    <p style="color: #666; margin-top: 8px; line-height: 1.6;">
-                        Sistem ini berjalan dengan metode <strong>Perpetual Moving Average</strong>. Setiap transaksi penerimaan bahan baku akan menyesuaikan harga pokok rata-rata tertimbang, sedangkan setiap transaksi penjualan menu akan memotong persediaan bahan baku secara otomatis (<em>Material Flow</em>) dan mencatat jurnal HPP secara <em>real-time</em>.
-                    </p>
+                    <h2><i class="fa-solid fa-clock-rotate-left" style="color: #2980b9;"></i> Penjualan Terakhir</h2>
+                    <div class="table-responsive">
+                        <table id="recent-sales-table">
+                            <thead>
+                                <tr>
+                                    <th>Waktu</th>
+                                    <th>Menu Terjual</th>
+                                    <th>Total (Rp)</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </main>
