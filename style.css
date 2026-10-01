@@ -36,11 +36,12 @@ body {
 }
 
 .brand .logo {
-    width: 42px;
-    height: 42px;
-    border-radius: 50%;
-    background: #fff;
-    padding: 2px;
+    width: 45px;
+    height: 45px;
+    border-radius: 8px; /* Tampilan agak melengkung rapi */
+    object-fit: contain; /* Memastikan logo tidak terdistorsi */
+    background: #ffffff;
+    padding: 3px;
 }
 
 .brand-text h2 {
