@@ -56,17 +56,20 @@ async function loadDashboardMetrics() {
     const statAsset = document.getElementById('stat-total-asset');
     const statSales = document.getElementById('stat-total-sales');
     const statProfit = document.getElementById('stat-gross-profit');
+    
+    // Element Rincian Laba Rugi
+    const summarySales = document.getElementById('summary-sales');
+    const summaryHpp = document.getElementById('summary-hpp');
+    const summaryGross = document.getElementById('summary-gross');
+
     const lowStockTable = document.querySelector('#low-stock-table tbody');
     const recentSalesTable = document.querySelector('#recent-sales-table tbody');
 
-    // Fetch Data dari Supabase
-    const { data: materials, error: errMaterials } = await supabaseClient.from('raw_materials').select('*');
-    const { data: sales, error: errSales } = await supabaseClient.from('sales').select('*, products(name)').order('created_at', { ascending: false });
+    // 1. Fetch Data dari Supabase
+    const { data: materials } = await supabaseClient.from('raw_materials').select('*');
+    const { data: sales } = await supabaseClient.from('sales').select('*, products(name)').order('created_at', { ascending: false });
 
-    if (errMaterials) console.error("Error loading materials:", errMaterials);
-    if (errSales) console.error("Error loading sales:", errSales);
-
-    // Hitung Total Aset Persediaan & Deteksi Stok Menipis (Stok <= 500)
+    // 2. Hitung Total Aset Persediaan & Stok Menipis
     let totalAsset = 0;
     if (materials) {
         materials.forEach(m => totalAsset += ((m.stock_qty || 0) * (m.unit_cost || 0)));
@@ -89,7 +92,7 @@ async function loadDashboardMetrics() {
         }
     }
 
-    // Hitung Omzet, HPP, Laba Kotor & 5 Transaksi Terakhir
+    // 3. Hitung Kalkulasi Laba Rugi
     let totalPenjualan = 0;
     let totalHPP = 0;
 
@@ -101,9 +104,16 @@ async function loadDashboardMetrics() {
 
         const grossProfit = totalPenjualan - totalHPP;
 
+        // Update Card
         if (statSales) statSales.textContent = `Rp ${totalPenjualan.toLocaleString('id-ID')}`;
         if (statProfit) statProfit.textContent = `Rp ${grossProfit.toLocaleString('id-ID')}`;
 
+        // Update Widget Laba Rugi
+        if (summarySales) summarySales.textContent = `Rp ${totalPenjualan.toLocaleString('id-ID')}`;
+        if (summaryHpp) summaryHpp.textContent = `- Rp ${totalHPP.toLocaleString('id-ID')}`;
+        if (summaryGross) summaryGross.textContent = `Rp ${grossProfit.toLocaleString('id-ID')}`;
+
+        // Update Tabel Penjualan Terakhir
         if (recentSalesTable) {
             const recentSales = sales.slice(0, 5);
             if (recentSales.length > 0) {
