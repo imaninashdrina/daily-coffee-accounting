@@ -16,11 +16,11 @@ Aplikasi ini dikembangkan untuk membantu proses pencatatan akuntansi menjadi leb
 
 | Keterangan | Informasi |
 |---|---|
-| Nama Mahasiswa | [Imanina Nur Shadrina] |
-| NIM | [12030124140230] |
-| Kelas | [D] |
-| Mata Kuliah | [Pengkodean dan Pemograman] |
-| Dosen Pengampu | [Dr. Totok Dewayanto, S.E., M.Si., Akt.] |
+| Nama Mahasiswa | Imanina Nur Shadrina |
+| NIM | 12030124140230 |
+| Kelas | D |
+| Mata Kuliah | Pengkodean dan Pemograman |
+| Dosen Pengampu | Dr. Totok Dewayanto, S.E., M.Si., Akt. |
 
 ## 3. Fitur Aplikasi
 
@@ -98,70 +98,112 @@ Keterangan:
 
 ## 6. Database Supabase
 
-Aplikasi menggunakan Supabase untuk menyimpan dan mengambil data transaksi serta persediaan.
+Aplikasi menggunakan Supabase sebagai database untuk menyimpan dan mengambil data transaksi serta persediaan.
 
 ### A. Tabel `raw_materials`
 
 Digunakan untuk menyimpan informasi bahan baku.
 
-Kolom utama:
-- `id`: identitas bahan baku.
-- `code`: kode bahan baku.
-- `name`: nama bahan baku.
-- `unit`: satuan bahan baku.
-- `stock_qty`: jumlah persediaan.
-- `unit_cost`: biaya per satuan.
-- `created_at`: waktu pembuatan data.
+| Kolom | Tipe Data | Keterangan |
+|---|---|---|
+| `id` | UUID | Primary key bahan baku |
+| `code` | VARCHAR(20) | Kode bahan baku |
+| `name` | VARCHAR(100) | Nama bahan baku |
+| `unit` | VARCHAR(20) | Satuan bahan baku |
+| `stock_qty` | NUMERIC(10,2) | Jumlah persediaan |
+| `unit_cost` | NUMERIC(12,2) | Biaya per satuan |
+| `created_at` | TIMESTAMPTZ | Waktu pembuatan data |
 
 ### B. Tabel `products`
 
 Digunakan untuk menyimpan informasi menu produk.
 
-Kolom utama:
-- `id`: identitas produk.
-- `name`: nama produk.
-- `price`: harga jual.
-- `created_at`: waktu pembuatan data.
+| Kolom | Tipe Data | Keterangan |
+|---|---|---|
+| `id` | UUID | Primary key produk |
+| `name` | VARCHAR(100) | Nama produk |
+| `price` | NUMERIC(12,2) | Harga jual |
+| `created_at` | TIMESTAMPTZ | Waktu pembuatan data |
 
 ### C. Tabel `recipe_boms`
 
 Digunakan untuk menyimpan resep atau komposisi bahan baku yang diperlukan untuk membuat produk.
 
-Kolom utama:
-- `id`: identitas resep.
-- `product_id`: referensi produk.
-- `material_id`: referensi bahan baku.
-- `qty_required`: jumlah bahan baku yang dibutuhkan.
+| Kolom | Tipe Data | Keterangan |
+|---|---|---|
+| `id` | UUID | Primary key resep |
+| `product_id` | UUID | Foreign key ke tabel `products` |
+| `material_id` | UUID | Foreign key ke tabel `raw_materials` |
+| `qty_required` | NUMERIC(10,2) | Jumlah bahan baku yang dibutuhkan |
 
 ### D. Tabel `sales`
 
 Digunakan untuk menyimpan transaksi penjualan.
 
-Kolom utama:
-- `id`: identitas transaksi.
-- `product_id`: referensi produk.
-- `qty_sold`: jumlah produk terjual.
-- `total_price`: total harga penjualan.
-- `total_hpp`: total harga pokok penjualan.
-- `created_at`: waktu transaksi.
+| Kolom | Tipe Data | Keterangan |
+|---|---|---|
+| `id` | UUID | Primary key transaksi |
+| `product_id` | UUID | Foreign key ke tabel `products` |
+| `qty_sold` | INT | Jumlah produk terjual |
+| `total_price` | NUMERIC(12,2) | Total harga penjualan |
+| `total_hpp` | NUMERIC(12,2) | Total harga pokok penjualan |
+| `created_at` | TIMESTAMPTZ | Waktu transaksi |
 
 ### E. Tabel `journal_entries`
 
 Digunakan untuk menyimpan jurnal umum akuntansi.
 
-Kolom utama:
-- `id`: identitas jurnal.
-- `entry_date`: tanggal pencatatan.
-- `description`: keterangan transaksi.
-- `account_debit`: akun debit.
-- `account_credit`: akun kredit.
-- `amount`: nominal transaksi.
+| Kolom | Tipe Data | Keterangan |
+|---|---|---|
+| `id` | UUID | Primary key jurnal |
+| `entry_date` | TIMESTAMPTZ | Tanggal pencatatan |
+| `description` | TEXT | Keterangan transaksi |
+| `account_debit` | VARCHAR(100) | Akun debit |
+| `account_credit` | VARCHAR(100) | Akun kredit |
+| `amount` | NUMERIC(12,2) | Nominal transaksi |
+
+Tabel ini belum memiliki foreign key yang menghubungkannya secara langsung dengan tabel transaksi. Jurnal menyimpan informasi pencatatan berdasarkan tanggal, deskripsi, akun debit, akun kredit, dan nominal transaksi.
 
 ### F. Tabel `public.expense`
 
-Tabel ini tersedia pada Supabase untuk data beban atau pengeluaran. Berdasarkan kondisi database yang diperiksa, tabel tersebut masih kosong. Penggunaan tabel ini dalam fitur laporan perlu disesuaikan dengan nama tabel dan kolom yang dipanggil oleh kode aplikasi.
+Tabel ini tersedia pada Supabase untuk menyimpan data beban atau pengeluaran. Berdasarkan informasi yang tersedia, tabel tersebut masih kosong karena belum ada data pengeluaran yang tersimpan.
 
-## 7. Alur dan Logika Akuntansi
+Penggunaan tabel ini dalam fitur laporan perlu disesuaikan dengan nama tabel dan kolom yang dipanggil oleh kode aplikasi.
+
+## 7. Entity Relationship Diagram (ERD)
+
+Entity Relationship Diagram (ERD) merupakan diagram yang menggambarkan struktur tabel serta hubungan antarentitas dalam database Daily Coffee Accounting.
+
+### A. Struktur Relasi Database
+
+Relasi utama yang didefinisikan dalam SQL adalah sebagai berikut:
+
+1. **`products` ke `recipe_boms`**: satu produk dapat memiliki beberapa komposisi resep. Kolom `recipe_boms.product_id` mengacu pada `products.id`.
+2. **`raw_materials` ke `recipe_boms`**: satu bahan baku dapat digunakan dalam beberapa resep. Kolom `recipe_boms.material_id` mengacu pada `raw_materials.id`.
+3. **`products` ke `sales`**: satu produk dapat muncul dalam beberapa transaksi penjualan. Kolom `sales.product_id` mengacu pada `products.id`.
+4. **`journal_entries`**: menyimpan catatan jurnal umum, tetapi belum memiliki foreign key langsung ke tabel penjualan atau pembelian.
+5. **`expense`**: tersedia sebagai tabel pengeluaran, tetapi belum memiliki data yang tersimpan.
+
+### B. Diagram ERD
+
+Tambahkan gambar ERD pada bagian ini setelah mengunggah file gambar ke repository GitHub dengan nama `erd-daily-coffee.png`.
+
+```markdown
+![ERD Daily Coffee Accounting](erd-daily-coffee.png)
+```
+
+### C. Keterangan ERD
+
+- **PK (Primary Key)** merupakan kolom identitas unik pada suatu tabel.
+- **FK (Foreign Key)** merupakan kolom yang menghubungkan suatu tabel dengan tabel lain.
+- Relasi resep digunakan untuk menghubungkan menu produk dengan bahan baku yang dibutuhkan.
+- Relasi penjualan digunakan untuk menghubungkan transaksi dengan produk yang terjual.
+- Jurnal umum menyimpan pencatatan akuntansi tanpa relasi foreign key langsung ke transaksi.
+- Tabel pengeluaran tersedia, tetapi masih kosong.
+
+**Catatan:** diagram ERD harus mencerminkan relasi yang benar-benar diterapkan pada database Supabase. Garis yang hanya menggambarkan alur pencatatan tidak boleh dianggap sebagai foreign key apabila tidak didefinisikan dalam SQL.
+
+## 8. Alur dan Logika Akuntansi
 
 ### A. Pembelian Bahan Baku
 
@@ -171,7 +213,7 @@ Pembelian menambah jumlah stok bahan baku. Sistem menghitung biaya rata-rata bar
 
 Biaya rata-rata baru = (Nilai persediaan lama + Nilai pembelian) / (Jumlah stok lama + Jumlah stok yang dibeli)
 
-Pencatatan jurnal yang digunakan:
+Pencatatan jurnal pembelian:
 
 | Akun Debit | Akun Kredit |
 |---|---|
@@ -203,11 +245,11 @@ Laba Kotor = Total Penjualan − Total HPP
 |---|---|
 | Beban HPP | Persediaan Bahan Baku |
 
-## 8. Data Awal Bahan Baku dan Produk
+## 9. Data Awal Bahan Baku dan Produk
 
 Database awal menyediakan contoh data berikut.
 
-### Bahan Baku
+### A. Bahan Baku
 
 | Kode | Nama Bahan Baku | Satuan | Stok Awal | Biaya per Satuan |
 |---|---|---|---:|---:|
@@ -215,21 +257,27 @@ Database awal menyediakan contoh data berikut.
 | MAT-02 | Susu UHT Fresh | ml | 5.000 | Rp20 |
 | MAT-03 | Paper Cup 16oz | pcs | 200 | Rp1.500 |
 
-### Menu Produk
+### B. Menu Produk
 
 | Nama Produk | Harga Jual |
 |---|---:|
 | Caffe Latte 16oz | Rp28.000 |
 | Espresso Single | Rp18.000 |
 
-Resep awal yang tersedia pada SQL mencakup Caffe Latte 16oz, dengan kebutuhan 18 gram biji kopi Arabika, 200 ml susu UHT Fresh, dan 1 buah Paper Cup 16oz. Resep Espresso Single perlu ditambahkan jika menu tersebut akan diproses melalui fitur penjualan berbasis resep.
+Resep awal yang tersedia dalam SQL mencakup Caffe Latte 16oz, dengan kebutuhan:
 
-## 9. Cara Menjalankan Aplikasi
+- 18 gram biji kopi Arabika.
+- 200 ml susu UHT Fresh.
+- 1 buah Paper Cup 16oz.
+
+Resep Espresso Single perlu ditambahkan jika menu tersebut akan diproses melalui fitur penjualan berbasis resep.
+
+## 10. Cara Menjalankan Aplikasi
 
 1. Buka repository GitHub Daily Coffee Accounting.
 2. Unduh atau salin seluruh source code.
 3. Pastikan project Supabase sudah dibuat dan tabel yang diperlukan tersedia.
-4. Sesuaikan konfigurasi koneksi Supabase pada `app.js` jika menggunakan project database yang berbeda.
+4. Pastikan konfigurasi koneksi Supabase pada `app.js` sesuai dengan project database yang digunakan.
 5. Jalankan `index.html` melalui browser atau server lokal.
 6. Buka halaman dashboard untuk melihat informasi persediaan dan penjualan.
 7. Gunakan halaman pembelian, penjualan, persediaan, dan jurnal sesuai fungsi masing-masing.
@@ -238,7 +286,7 @@ Aplikasi yang telah dipublikasikan juga dapat diakses melalui GitHub Pages:
 
 https://imaninashdrina.github.io/daily-coffee-accounting/
 
-## 10. Pengujian Aplikasi
+## 11. Pengujian Aplikasi
 
 Pengujian dapat dilakukan melalui beberapa skenario berikut:
 
@@ -252,17 +300,17 @@ Pengujian dapat dilakukan melalui beberapa skenario berikut:
 
 Hasil pengujian harus disesuaikan dengan hasil aktual ketika setiap skenario dijalankan.
 
-## 11. Catatan Pengembangan
+## 12. Catatan Pengembangan
 
 - Struktur tabel dan nama kolom pada dokumentasi mengikuti SQL database yang tersedia.
-- Tabel `public.expense` masih kosong sehingga data beban belum dapat ditampilkan dari tabel tersebut sebelum tersedia transaksi.
+- Tabel `public.expense` masih kosong sehingga belum terdapat data pengeluaran yang dapat ditampilkan dari tabel tersebut.
 - Nama tabel beban pada kode aplikasi dan Supabase perlu dipastikan konsisten.
 - Operasi pembelian dan penjualan yang melibatkan beberapa perubahan database perlu dilindungi dengan transaksi database atau fungsi server agar konsistensi stok dan jurnal tetap terjaga jika terjadi kegagalan.
 - Akses database perlu dilindungi menggunakan kebijakan keamanan Supabase yang sesuai.
 - Dokumentasi ini menjelaskan fitur dan logika yang terdapat dalam proyek, bukan menyatakan bahwa aplikasi telah memenuhi seluruh standar akuntansi atau audit.
 
-## 12. Kesimpulan
+## 13. Kesimpulan
 
-Daily Coffee Accounting merupakan aplikasi berbasis web untuk membantu pengelolaan persediaan bahan baku, transaksi penjualan, perhitungan HPP, dan pencatatan jurnal umum pada usaha kedai kopi. Integrasi dengan Supabase memungkinkan data aplikasi disimpan dan diakses melalui database terpusat.
+Daily Coffee Accounting merupakan aplikasi berbasis web untuk membantu pengelolaan persediaan bahan baku, transaksi penjualan, perhitungan HPP, dan pencatatan jurnal umum pada usaha kedai kopi.
 
-Proyek ini menjadi penerapan teknologi web dalam mendukung proses administrasi dan pencatatan akuntansi usaha secara lebih terstruktur.
+Integrasi dengan Supabase memungkinkan data aplikasi disimpan dan diakses melalui database terpusat. Proyek ini menjadi penerapan teknologi web dalam mendukung proses administrasi dan pencatatan akuntansi usaha secara lebih terstruktur.
