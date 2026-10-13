@@ -188,9 +188,8 @@ Relasi utama yang didefinisikan dalam SQL adalah sebagai berikut:
 
 Tambahkan gambar ERD pada bagian ini setelah mengunggah file gambar ke repository GitHub dengan nama `erd-daily-coffee.png`.
 
-```markdown
+
 ![ERD Daily Coffee Accounting](erd-daily-coffee.png)
-```
 
 ### C. Keterangan ERD
 
